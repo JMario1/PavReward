@@ -1,0 +1,44 @@
+<div class="d-flex align-center">
+    <div >
+        @if(Info.Type == SeriesType.Spending)
+        {
+            <div class="chart-n">@($"-{@Info.PointChange.ToString()} Ps")</div>
+        }
+        else{
+            <div class="chart-n">@($"+{@Info.PointChange.ToString()} Ps")</div>
+        }
+        <div class="chart-t">@Info.Type</div>
+    </div>
+    <div>
+        <ul class="chart">
+            @foreach (var item in NormalizeData(Info.Series))
+            {
+                <li>
+                    <span style="height:@item%; background: @Color"></span>
+                </li>
+            }
+        </ul>    
+    </div>
+</div>
+
+@code{
+
+    [Parameter]
+    public ChartInfo Info {get; set;}
+
+    [Parameter]
+    public string Color {get; set;}
+
+    private static int[] NormalizeData(List<int> data)
+    {
+        double dataMax = data.Max();
+        double dataMin = data.Min();
+        double range = dataMax - dataMin;
+
+        return data
+            .Select(d => (d - dataMin) / range)
+            .Select(n => (int)((1 - n) * 1 + n * 100))
+            .ToArray();
+    }
+
+}

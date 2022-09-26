@@ -1,0 +1,39 @@
+
+<div>
+  <div class="creditcard">
+    <div class="justify-space-between d-flex">
+      <div>
+        <img class="img-fluid w-100 chip" src="chip.png" />
+      </div>
+      <div>
+        <img class="img-fluid w-100" src="ms-logo.png" />
+      </div>
+    </div>
+    <div style="height: 40px"></div>
+    <div>
+      <div>
+        <div class="card-name">
+          @Name
+        </div>
+        <div class="card-num">
+          @Number
+        </div>
+        <div class="card-num">
+          @Expiry
+        </div>
+      </div>    
+    </div>
+  </div>
+  </div>
+
+
+@code {
+    [Parameter]
+    public string? Name { get; set; }
+
+    [Parameter]
+    public string? Number { get; set; }
+
+    [Parameter]
+    public string? Expiry { get; set; }
+}

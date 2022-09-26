@@ -1,0 +1,43 @@
+<div>
+    <MudToolBar >
+        <MudText>Lastest Transactions</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Outlined.Search" Color="Color.Inherit" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Class="mr-n4" />
+    </MudToolBar>
+    <MudList>
+        @foreach (var item in Data)
+        {
+            @if(item.Type == TransactionType.Credit)
+            {
+                <MudListItem Icon="@Icons.TwoTone.ArrowCircleRight" IconColor="Color.Success" IconSize="Size.Large">
+                    <div class="d-flex justify-space-between content-text">
+                        <div>
+                            <div>@item.Name</div>
+                            <div class="content-text-2">@item.Date.ToString()</div>
+                        </div>
+                        <div style="align-self:center; text-align:end">+@item.Amount Points</div>
+                    </div>
+                </MudListItem>
+            }
+            else
+            {
+                <MudListItem Icon="@Icons.TwoTone.ArrowCircleLeft" IconColor="Color.Error" IconSize="Size.Large" >
+                    <div class="d-flex justify-space-between content-text">
+                        <div>
+                            <div>@item.Name</div>
+                            <div class="content-text-2">@item.Date.ToString()</div>
+                        </div>
+                        <div style="color: #994943; align-self:center; text-align:end">-@item.Amount Points</div>
+                    </div>
+                </MudListItem>
+            }
+        }
+    </MudList>
+</div>
+
+@code {
+
+    [Parameter]
+    public List<Transaction> Data {get; set;}
+}

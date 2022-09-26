@@ -1,0 +1,65 @@
+﻿@inherits LayoutComponentBase
+@using PavRewards.Data
+@inject ProfileService profileService
+
+
+<MudThemeProvider  />
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<PageTitle>PavRewards</PageTitle>
+
+<MudLayout>
+    <MudAppBar Elevation="0"  Style="padding-top: 20px; background:#F5F5F5">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu"  Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" Class=@hideItem />
+        <div style="width:130%" class=@showItem>
+            <div class=h-card>Hello @profile.FirstName</div>
+            <div class=c-card>Welcome to Pavillion Rewards</div>
+        </div>
+        <MudSpacer />
+        <MudTextField  @bind-Value="Search" Placeholder="Search" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Filled.Search" Class=@($"mx-3 {showItem}") Margin="Margin.Dense" Style="background: white;"/>
+        <MudIconButton Icon="@Icons.Filled.Search" Class=@($" {hideItem}")/>
+        <MudAvatar   Class="mx-3" Style="background: white">
+            <MudButton>
+                <MudBadge Dot="true" Overlap="true" Class="mx-6 my-4" Color="Color.Error" >
+                    <MudIcon Icon=@Icons.Outlined.NotificationsNone Color="Color.Default" />
+                </MudBadge>
+            </MudButton>
+        </MudAvatar>
+        <MudAvatar Color="Color.Secondary" Variant="Variant.Outlined" Image=@profile.Avatar />
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
+        <MudDrawerHeader >
+            <img src="Logo.png" />   
+        </MudDrawerHeader>
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer Class="mt-10 px-8" MaxWidth="MaxWidth.False">
+            <div style="width:130%" class=@($"px-2 pb-4 {hideItem}")>
+                <div class=h-card>Hello @profile.FirstName</div>
+                <div class=c-card>Welcome to Pavillion Rewards</div>
+            </div>
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    bool _drawerOpen = true;
+    string? hideItem => _drawerOpen ? "collapse" : null;
+    string? showItem => _drawerOpen ? null : "collapse";
+    public string? Search { get; set;}
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+
+    private Profile? profile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        profile = await profileService.GetProfileAsync();
+    }
+}

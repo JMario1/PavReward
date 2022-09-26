@@ -1,0 +1,45 @@
+.chart {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  max-width: 700px;
+  height: 40px;
+  margin-bottom: 10px;
+  background-size: 100% 50px;
+  background-position: left top;
+}
+.chart li {
+  position: relative;
+  display: table-cell;
+  vertical-align: bottom;
+  height: 40px;
+}
+.chart span {
+  margin: 0 0.1em;
+  display: block;
+  background: rgba(209, 236, 250, 0.75);
+  animation: draw 1s ease-in-out;
+}
+
+.chart-n {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18.8111px;
+    line-height: 28px;
+    letter-spacing: -0.015em;
+    color: #304858;
+    width: 70px;
+
+}
+
+.chart-t {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 13.9732px;
+    line-height: 16px;
+    letter-spacing: -0.035em;
+    color: #B4BAC1;
+
+}

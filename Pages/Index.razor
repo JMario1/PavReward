@@ -1,0 +1,101 @@
+﻿@page "/"
+@page "/dashboard"
+@using PavRewards.Data
+@inject DashboardService dashboardService
+
+<PageTitle>Index</PageTitle>
+
+<MudGrid>
+    <MudItem xs="12" sm="12" md="6">
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="8" >
+                 <PaymentCard Name=@dashboard.Card.Name Number=@dashboard.Card.Number Expiry=@dashboard.Card.Expiry />
+            </MudItem>
+            <MudItem xs="12" sm="12" md="4" >
+                <MudCard style="background: #FCBA2D; border-radius: 19.0803px; height: 200px;  max-width: 400px;">
+                   <MudCardHeader Class="b-card-1">
+                        <CardHeaderContent>
+                            <MudText >Balance</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Color="Color.Inherit" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent >
+                        <MudText Class="b-card-2" Typo="Typo.h4">@dashboard.Balance Points</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" > 
+                <MudPaper Elevation="0" Class="pa-4" Style="min-height: 500px;"><HistoryTable Data=@dashboard.Recent/></MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+    <MudItem xs="12" sm="12" md="6">
+        <MudGrid>
+            <MudItem xs="12">
+                <MudPaper Elevation="0" Class="pa-4" Style="height: 100px;">
+                    <div class="d-flex justify-space-around">             
+                        <Chart Info=@dashboard.EarnedPoints Color="#6236FF"/>
+                        <div class="vl mx-4"></div>
+                        <Chart Info=@dashboard.SpendPoints Color="#FDBC64"/>
+                    </div>    
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12">
+                <MudPaper Elevation="0" Class="pa-4" Style="min-height: 600px;">
+                    <MudToolBar>
+                        <MudText Style="width: 80%">Monthly Points</MudText>
+                        <MudSpacer />
+                        <MudSelect DisableUnderLine="true" Dense="true" Margin="Margin.Dense"  ValueChanged=@YearChanged T="int" Value=@Year>
+                            <MudSelectItem T="int" Value="2022">2022</MudSelectItem>
+                            <MudSelectItem T="int" Value="2021">2021</MudSelectItem>
+                        </MudSelect>
+                    </MudToolBar>
+                    <table style="width:100%">
+                        <thead class="dash-table">
+                            <tr>
+                                <th></th>
+                                <th>Points Earned</th>
+                                <th>Points Spent</th>
+                            </tr>
+                        </thead>
+                        @foreach (var item in monthlyPoints)
+                        {
+                            <tr>
+                                <td>@item.Key</td>
+                                <td>+@item.Value.Item1</td>
+                                <td>-@item.Value.Item2</td>
+                            </tr>
+                        }
+                    </table>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
+
+@code{
+  
+    public int Year { get; set; } = 2022;
+
+    private Dashboard? dashboard;
+    private Dictionary<string, Tuple<int, int>>? monthlyPoints;
+
+    protected override async Task OnInitializedAsync()
+    {
+        dashboard = await dashboardService.GetDashboardAsync();
+        monthlyPoints = await dashboardService.GetMonthlyPointsAsync(Year);
+    }
+
+    private async void YearChanged(int year)
+    {
+        monthlyPoints.Clear();
+
+        Year = year;
+
+        monthlyPoints = await dashboardService.GetMonthlyPointsAsync(year);
+
+        StateHasChanged();
+    }
+}
